@@ -18,6 +18,13 @@ def view_applications():
     conn.close()
     return rows
 
+def update_application(app_id, new_status):
+    conn = sqlite3.connect("job_tracker.db")
+    cursor = conn.cursor()
+    cursor.execute("UPDATE job_applications SET status=? WHERE id=?", (new_status, app_id))
+    conn.commit()
+    conn.close()
+
 def delete_application(app_id):
     conn = sqlite3.connect("job_tracker.db")
     cursor = conn.cursor()
