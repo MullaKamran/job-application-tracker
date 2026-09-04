@@ -1,4 +1,4 @@
-from crud import add_application,view_applications,update_application,delete_application
+from crud import add_application, get_statistics,view_applications,update_application,delete_application,export_to_csv
 def main():
     while True:
         print("\n JOB APPLICATION TRACKER")
@@ -6,7 +6,9 @@ def main():
         print("2.View all job applications")
         print("3.Update a job application")
         print("4.Delete a job application")
-        print("5.Exit")
+        print("5.View statistics")
+        print("6.Export job applications to CSV")
+        print("7.Exit")
         
         choice=input("Enter your choice: ")
         if choice=="1":
@@ -29,8 +31,16 @@ def main():
         elif choice=="4":
                 app_id=int(input("Enter applicarion ID to delete:"))
                 delete_application(app_id)
-                
+        
         elif choice=="5":
+               stats=get_statistics()
+               for status,count in stats:
+                print(f"Status: {status}, Count: {count}")        
+                
+        elif choice=="6":
+            export_to_csv()
+            print("Job applications exported to CSV.")
+        elif choice=="7":
             print("goodbye!")
         
             break

@@ -1,4 +1,5 @@
 import sqlite3
+import pandas as pd
 
 def add_application(company, role, status, date_applied, notes):
     conn = sqlite3.connect("job_tracker.db")
@@ -31,3 +32,18 @@ def delete_application(app_id):
     cursor.execute("DELETE FROM job_applications WHERE id=?", (app_id,))
     conn.commit()
     conn.close()
+    
+def get_statistics():
+    conn=sqlite3.connect("job_tracker.db")
+    cursor=conn.cursor()
+    cursor.execute("SELECT status,COUNT(*)FROM job_applications GROUP BY status") 
+    status_count=cursor.fetchall()
+    conn.close()   
+    return status_count
+
+
+def export_to_csv():
+    conn = sqlite3.connect("job_tracker.db")
+    df = pd.read_sql_query("SELECT * FROM job_applications", conn)
+    conn.close()
+    df.to_csv("job_applications_export.csv", index=False)
