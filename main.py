@@ -1,4 +1,7 @@
 from crud import add_application, get_statistics,view_applications,update_application,delete_application,export_to_csv
+from db import create_table
+
+create_table()
 def main():
     while True:
         print("\n JOB APPLICATION TRACKER")
