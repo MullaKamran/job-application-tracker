@@ -36,4 +36,7 @@ def update_application_endpoint(app_id:int,status_update: StatusUpdate):
 def delete_application_endpoint(app_id:int):
     delete_application(app_id)
     return {"message":"Application deleted successfully"}
+@app.get("/applications")
+def get_applications():
+    return view_applications()
     
