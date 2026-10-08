@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from unittest import result
+
+from fastapi import FastAPI,HTTPException
 from pydantic import BaseModel
 from crud import add_application,view_applications,update_application,delete_application
 from db import create_table
@@ -27,15 +29,19 @@ def create_application(application: JobApplication):
     )
     return {"message": "Application added successfully"}
 
-@app.put("/applications/{app_id}")    
-def update_application_endpoint(app_id:int,status_update: StatusUpdate):
-    update_application(app_id,status_update.status)
-    return {"message":"Application updated successfully"}
+@app.put("/applications/{app_id}")
+def update_application_endpoint(app_id: int, status_update: StatusUpdate):
+    result = update_application(app_id, status_update.status)
+    if not result:
+        raise HTTPException(status_code=404, detail="Application not found")
+    return {"message": "Application updated successfully"}
 
 @app.delete("/applications/{app_id}")
-def delete_application_endpoint(app_id:int):
-    delete_application(app_id)
-    return {"message":"Application deleted successfully"}
+def delete_application_endpoint(app_id: int):
+    result = delete_application(app_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Application not found")
+    return {"message": "Application deleted successfully"}
 @app.get("/applications")
 def get_applications():
     return view_applications()
