@@ -23,13 +23,23 @@ def view_applications():
     return rows
 
 
-def update_application(app_id, new_status):
+def update_application(app_id, new_status, new_role=None):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute(
-        "UPDATE job_applications SET status = ? WHERE id = ?",
-        (new_status, app_id),
-    )
+    if new_role:
+        cursor.execute(
+            "UPDATE job_applications SET status = ?, role = ? WHERE id = ?",
+            (new_status, new_role, app_id),
+        )
+    else:
+        cursor.execute(
+            "UPDATE job_applications SET status = ? WHERE id = ?",
+            (new_status, app_id),
+        )
+    conn.commit()
+    rowcount = cursor.rowcount
+    conn.close()
+    return rowcount > 0
     conn.commit()
     changed = cursor.rowcount > 0
     conn.close()
